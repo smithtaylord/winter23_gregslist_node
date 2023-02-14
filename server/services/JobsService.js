@@ -2,6 +2,18 @@ import { dbContext } from "../db/DbContext.js"
 import { BadRequest } from "../utils/Errors.js"
 
 class JobsService {
+    async editJob(id, body) {
+        const data = await this.getJobById(id)
+        data.rate = body.rate || data.rate
+        data.description = body.description || data.description
+        await data.save()
+        return data
+    }
+    async deleteJob(id) {
+        const data = await this.getJobById(id)
+        await data.remove()
+        return data
+    }
     async createJob(body) {
         const data = await dbContext.Jobs.create(body)
         return data
